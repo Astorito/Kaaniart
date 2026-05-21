@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title data-i18n="meta.title">PATAGONIA AERIAL | The Silence of the South</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@200;400;600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        spacing: {
+          "container-max": "1440px",
+          "margin-safe": "5vw",
+          "margin-mobile": "20px",
+          "margin-desktop": "80px",
+          "gutter": "24px",
+          "unit": "8px",
+        },
+        fontFamily: {
+          "display": ["Libre Caslon Text", "serif"],
+          "headline": ["Libre Caslon Text", "serif"],
+          "body": ["var(--font-body)", "sans-serif"],
+        },
+        fontSize: {
+          "display-lg": ["64px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "400" }],
+          "headline-lg": ["48px", { lineHeight: "1.2", fontWeight: "400" }],
+          "headline-md": ["32px", { lineHeight: "1.3", fontWeight: "400" }],
+          "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+          "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+          "label-sm": ["12px", { lineHeight: "1", letterSpacing: "0.1em", fontWeight: "600" }],
+        },
+        borderRadius: {
+          DEFAULT: "0.25rem",
+          lg: "0.5rem",
+          xl: "0.75rem",
+          full: "9999px",
+        },
+      },
+    },
+  };
+</script>
+<style>
+  :root {
+    --bg: #f4f4f2;
+    --text: #1a1c1c;
+    --text-muted: #4c4546;
+    --text-faint: #7e7576;
+    --primary: #1a1c1c;
+    --accent: #5d5f5f;
+    --border: rgba(0, 0, 0, 0.08);
+    --border-strong: rgba(0, 0, 0, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.22);
+    --glass-border: rgba(255, 255, 255, 0.45);
+    --glass-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.12);
+    --pill-bg: rgba(255, 255, 255, 0.35);
+    --pill-bg-scrolled: rgba(255, 255, 255, 0.55);
+    --hero-text: #ffffff;
+    --font-body: "Inter", sans-serif;
+  }
+  html.dark {
+    --bg: #121317;
+    --text: #e3e2e7;
+    --text-muted: #d6c3b8;
+    --text-faint: #9e8d83;
+    --primary: #ffc8a2;
+    --accent: #f9b98c;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.18);
+    --glass-bg: rgba(18, 19, 23, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    --pill-bg: rgba(18, 19, 23, 0.4);
+    --pill-bg-scrolled: rgba(18, 19, 23, 0.7);
+    --hero-text: #ffffff;
+    --font-body: "Manrope", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { min-height: 100vh; }
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    transition: background-color 0.6s ease, color 0.6s ease;
+  }
+  .text-muted { color: var(--text-muted); }
+  .text-faint { color: var(--text-faint); }
+  .text-primary-c { color: var(--primary); }
+  .accent { color: var(--accent); }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+
+  /* Video backgrounds */
+  .page-bg-video {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+  }
+  #video-light { opacity: 1; }
+  html.dark #video-light { opacity: 0; }
+  html.dark #video-dark  { opacity: 1; }
+
+  /* Vignette overlay */
+  .page-vignette {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    transition: background 0.8s ease;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(244,244,242,0.35) 100%);
+  }
+  html.dark .page-vignette {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(18,19,23,0.55) 100%);
+  }
+
+  .glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .floating-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.12);
+  }
+  .pill-glass {
+    background: var(--pill-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 9999px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: background 0.4s ease, padding 0.4s ease;
+  }
+  nav.is-scrolled {
+    background: var(--pill-bg-scrolled);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .cinematic-shadow {
+    text-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  /* Mist (light only) */
+  .mist-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+  }
+  html.dark .mist-layer { opacity: 0; }
+  .mist-blob {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float-mist linear infinite;
+  }
+  @keyframes float-mist {
+    from { transform: translateX(-100%) translateY(0%); }
+    to   { transform: translateX(200%) translateY(15%); }
+  }
+
+  /* Reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.active { opacity: 1; transform: translateY(0); }
+
+  .lang-btn { transition: color 0.3s ease; color: var(--text-faint); }
+  .lang-btn.active { color: var(--primary); font-weight: 600; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
+
+  ::selection { background: rgba(255, 200, 162, 0.4); color: inherit; }
+</style>
+</head>
+<body>
+
+<!-- Video Backgrounds -->
+<video id="video-light" class="page-bg-video" autoplay muted loop playsinline>
+  <source src="Landing 2 aerea.mp4" type="video/mp4">
+</video>
+<video id="video-dark" class="page-bg-video" autoplay muted loop playsinline>
+  <source src="Nocturna.mp4" type="video/mp4">
+</video>
+<!-- Vignette overlay -->
+<div class="page-vignette"></div>
+
+<!-- Mist (light mode only) -->
+<div class="mist-layer" aria-hidden="true">
+  <div class="mist-blob w-[800px] h-[400px] top-[10%]" style="animation-duration: 40s; animation-delay: -5s;"></div>
+  <div class="mist-blob w-[1000px] h-[500px] top-[40%]" style="animation-duration: 60s; animation-delay: -15s;"></div>
+  <div class="mist-blob w-[1200px] h-[600px] top-[70%]" style="animation-duration: 50s; animation-delay: -25s;"></div>
+</div>
+
+<!-- Floating TopNavBar -->
+<div class="fixed top-6 left-0 right-0 z-[60] flex justify-center px-margin-safe">
+  <nav class="pill-glass px-8 py-4 flex justify-between items-center w-full max-w-[1440px]">
+    <div class="font-display text-xl md:text-2xl tracking-[0.18em] uppercase text-primary-c">PATAGONIA</div>
+
+    <div class="hidden md:flex gap-10 items-center">
+      <a class="font-body text-label-sm tracking-[0.2em] uppercase text-primary-c border-b border-current pb-1" href="#gallery" data-i18n="nav.gallery">Gallery</a>
+      <a class="font-body text-label-sm tracking-[0.2em] uppercase lang-btn hover:text-primary-c" href="#expeditions" data-i18n="nav.expeditions">Expeditions</a>
+      <a class="font-body text-label-sm tracking-[0.2em] uppercase lang-btn hover:text-primary-c" href="#journal" data-i18n="nav.journal">Journal</a>
+    </div>
+
+    <div class="flex items-center gap-5">
+      <div class="hidden md:flex items-center gap-2 font-body text-label-sm tracking-[0.2em]">
+        <button class="lang-btn" data-lang="es">ES</button>
+        <span class="text-faint">/</span>
+        <button class="lang-btn active" data-lang="en">EN</button>
+      </div>
+      <button id="theme-toggle" class="flex items-center justify-center p-2 rounded-full hover:bg-black/5 transition-colors text-primary-c" aria-label="Toggle theme">
+        <span class="material-symbols-outlined !text-xl" id="theme-icon">dark_mode</span>
+      </button>
+      <button class="pill-glass px-6 py-2.5 font-body text-label-sm tracking-[0.2em] uppercase text-primary-c hover:bg-white/40 dark:hover:bg-white/10 transition-all" data-i18n="nav.inquire">Inquire</button>
+    </div>
+  </nav>
+</div>
+
+<!-- Hero -->
+<header class="relative min-h-screen w-full flex items-center justify-center px-margin-safe">
+  <div class="relative z-10 text-center max-w-4xl">
+    <span class="font-body text-label-sm tracking-[0.4em] uppercase cinematic-shadow mb-8 block" style="color: var(--hero-text);" data-i18n="hero.eyebrow">Patagonia Aérea</span>
+    <h1 class="font-display text-[40px] md:text-display-lg cinematic-shadow tracking-[0.12em] leading-tight uppercase mb-12" style="color: var(--hero-text);" data-i18n="hero.title">The Silence of the South</h1>
+    <p class="font-body text-label-sm tracking-[0.3em] uppercase opacity-90 cinematic-shadow mb-12" style="color: var(--hero-text);" data-i18n="hero.subtitle">Limited Edition Aerial Perspectives of Patagonia</p>
+    <div class="flex justify-center">
+      <div class="w-px h-24 animate-pulse" style="background: linear-gradient(to bottom, var(--hero-text), transparent);"></div>
+    </div>
+  </div>
+</header>
+
+<!-- The Vision -->
+<div class="px-margin-safe w-full">
+  <section class="max-w-[1440px] mx-auto glass-panel rounded-[2.5rem] p-10 md:p-24 my-24 grid md:grid-cols-12 gap-gutter items-center reveal">
+    <div class="md:col-span-5">
+      <h2 class="font-body text-label-sm tracking-[0.2em] uppercase accent mb-4" data-i18n="vision.eyebrow">The Vision</h2>
+      <h3 class="font-headline text-3xl md:text-headline-lg mb-8" data-i18n="vision.title">Capturing the unseen breath of the Andes.</h3>
+      <p class="font-body text-body-lg text-muted leading-relaxed" data-i18n="vision.body">Beyond the charted paths lies a world defined by the wind and the millennial migration of clouds. Our aerial surveys capture the pure, untamed geometry of the southern edge of the world, where ice meets the ether.</p>
+    </div>
+    <div class="md:col-span-6 md:col-start-7">
+      <div class="aspect-[4/5] floating-card overflow-hidden group relative rounded-2xl">
+        <img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmJX5K3Ui0JXRY6Q_bJHGB3bmXYGcsTf3qzEB9C3yWOONeDnlynXkLOnR2U_C59JwuMK1UPi961aTxCysPq6PY4UnIetksV5gge0ocg4P6Fw9gVNdpfuHMpm_iRpnmZKKTGkzwY2q-3pMkupWty797FWXGsWQ-I7jUNm2ssa7Oe0Awg0ay073OFl55VJ_mHSOh8Qc-XD5GCE1oiweIWiodq_5bnJSojea5pnK4YN7DbW7J18XkiihaScvNOL123lkJdmf5CA1OBpY" alt="Fitz Roy Massif" />
+      </div>
+      <p class="mt-6 font-body text-label-sm tracking-[0.2em] uppercase text-faint" data-i18n="vision.caption">Fitz Roy Massif | 12,000 ft</p>
+    </div>
+  </section>
+</div>
+
+<!-- Exhibition -->
+<div id="gallery" class="px-margin-safe w-full">
+  <section class="max-w-[1440px] mx-auto glass-panel rounded-[2.5rem] p-10 md:p-24 my-24 reveal">
+    <div class="flex flex-col items-center mb-20 text-center">
+      <h2 class="font-headline text-3xl md:text-headline-lg italic mb-4" data-i18n="exhibition.title">The Exhibition</h2>
+      <div class="w-24 h-px mb-6" style="background: var(--border-strong);"></div>
+      <p class="font-body text-label-sm tracking-[0.25em] uppercase text-faint" data-i18n="exhibition.subtitle">Curated for the discerning eye</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-y-20 md:gap-x-12">
+      <!-- Piece 1 -->
+      <div class="md:col-span-5 reveal">
+        <div class="floating-card p-6 md:p-10 rounded-2xl">
+          <div class="aspect-[3/4] overflow-hidden rounded-xl">
+            <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmK9Mj66YYuAcHHvKKPUhVXihTjhnaej-yNtWh22L_IqY1vTcGiPlvyu4SmV5L-3g11jDAgiW0kbvNLeHPG9yGOEMWuxjd5lU2cmAAWUBZ94ha0htud8hAbu9ImPzFvLCFcvMmvZ9RSXLXTFDUT3I5LyVTcNzhlGi5sIQGmOSjVKKR6fQQKPBMjKsy2lgdvHU_bjfeqgbO9Xstzd2Wv4mUMBOgrXEBxDC82o_NG5UgBPi9ArTTTWD1V2DWk4fcYHvdEzg3uwipA4Q" alt="" />
+          </div>
+        </div>
+        <div class="mt-8">
+          <p class="font-body text-label-sm tracking-[0.2em] uppercase text-faint mb-2"><span data-i18n="piece.1.serial">001 / Serial</span></p>
+          <h4 class="font-headline text-2xl md:text-headline-md" data-i18n="piece.1.title">Glacial Arteries</h4>
+        </div>
+      </div>
+
+      <!-- Piece 2 -->
+      <div class="md:col-span-5 md:col-start-7 md:mt-32 reveal">
+        <div class="floating-card p-6 md:p-10 rounded-2xl">
+          <div class="aspect-[4/5] overflow-hidden rounded-xl">
+            <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVPuVoWcgB6S3o_qiNcPMxE1ZG1-5txHhUyyOD7SmxrPaxkauBD3ejDfWv9rLd4GmDqLF1q0FdkGfs2atG99U2FFVafS3p3eSYULTg9V-C0HIZLERtKFrRmSlCUKkTXS1i0H-GNC39BxUdpbtX8OeTRRPFOJnElwjmFuisNK5uSCO_Mv2B3mnURMSiOhwvvRRa9SLIbqU85G-rmY6HfnievIxX_2RHkOIbLRMS-1x_lo6-b7g4YkIfna-3vGsZl79AZqC2W2NLUyo" alt="" />
+          </div>
+        </div>
+        <div class="mt-8">
+          <p class="font-body text-label-sm tracking-[0.2em] uppercase text-faint mb-2"><span data-i18n="piece.2.serial">002 / Serial</span></p>
+          <h4 class="font-headline text-2xl md:text-headline-md" data-i18n="piece.2.title">The White Silence</h4>
+        </div>
+      </div>
+
+      <!-- Piece 3 -->
+      <div class="md:col-span-6 reveal">
+        <div class="floating-card p-6 md:p-10 rounded-2xl">
+          <div class="aspect-video overflow-hidden rounded-xl">
+            <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQlSNG0pESOJ8FhvpWktAgZoJ6vp630x44lP-2vh-jzcgaaiDYSy8gED8UXt8_b1KmNjPg_5ccJwv55U8QQgxCnnMjCsJ48PPY2w0N5_MEVezPZ1jkImwQo6f9wUft9V7I9kj9VztirLId8BlDKQ2SfUa4BbuqrZKss0rUSIsTJ2aD3VNmo5OES9n_O82PNkcTrcNXlHGgLHrkSblNkMY5DwhyEApOY0ugRHxTr42RAOs0d6UhN0cCr7m7RwT_Jx8D-Or8Xk6-U30" alt="" />
+          </div>
+        </div>
+        <div class="mt-8">
+          <p class="font-body text-label-sm tracking-[0.2em] uppercase text-faint mb-2"><span data-i18n="piece.3.serial">003 / Serial</span></p>
+          <h4 class="font-headline text-2xl md:text-headline-md" data-i18n="piece.3.title">Ethereal Plateaus</h4>
+        </div>
+      </div>
+
+      <!-- Piece 4 -->
+      <div class="md:col-span-4 md:col-start-8 reveal">
+        <div class="floating-card p-6 md:p-10 rounded-2xl">
+          <div class="aspect-[3/4] overflow-hidden rounded-xl">
+            <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwbs1W74Ok8UE4JwCrw5sKgt6Lgl0xDsuCLD-T7mENT7LvkVOga-yXeJSoafuYgT1CUlMuEn8zm8hydUYcJGVWn5lhfP-vKpuN8om4uuYH6F4-IhokCUu3uIR3MmBKs96Hzl3BEok64sDhZRbCohgBhhP7gnxHcaUegMfr2xvg2M5ijCls85Z41n95iRyxG55I-OShpf1lRxC285U4Y3zwdPwxKFSHEJatloJsBug2Ii_f5GFLrk3pQXcfLeoJcrhyHAwcwvTV3Qg" alt="" />
+          </div>
+        </div>
+        <div class="mt-8">
+          <p class="font-body text-label-sm tracking-[0.2em] uppercase text-faint mb-2"><span data-i18n="piece.4.serial">004 / Serial</span></p>
+          <h4 class="font-headline text-2xl md:text-headline-md" data-i18n="piece.4.title">Crag &amp; Cloud</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- The Craft -->
+<div id="expeditions" class="px-margin-safe w-full">
+  <section class="max-w-[1440px] mx-auto glass-panel rounded-[2.5rem] p-10 md:p-24 my-24 reveal">
+    <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center gap-16 md:gap-24">
+      <div class="md:w-1/2 order-2 md:order-1">
+        <h2 class="font-body text-label-sm tracking-[0.2em] uppercase accent mb-4" data-i18n="craft.eyebrow">The Craft</h2>
+        <h3 class="font-headline text-3xl md:text-headline-lg mb-8" data-i18n="craft.title">Master-Grade Pigment Printing</h3>
+        <p class="font-body text-body-lg text-muted leading-relaxed mb-10" data-i18n="craft.body">Each piece is rendered on archival Hahnemühle paper, chosen for its ability to hold the deep, velvet indigos of the Patagonian night. Using master-grade carbon pigments, we ensure the silence of the landscape resonates for generations.</p>
+        <ul class="space-y-4">
+          <li class="flex items-center gap-4">
+            <span class="w-1.5 h-1.5 rounded-full" style="background: var(--accent);"></span>
+            <span class="font-body text-body-md" data-i18n="craft.bullet.1">Hand-signed by the artist</span>
+          </li>
+          <li class="flex items-center gap-4">
+            <span class="w-1.5 h-1.5 rounded-full" style="background: var(--accent);"></span>
+            <span class="font-body text-body-md" data-i18n="craft.bullet.2">Certificate of Authenticity</span>
+          </li>
+          <li class="flex items-center gap-4">
+            <span class="w-1.5 h-1.5 rounded-full" style="background: var(--accent);"></span>
+            <span class="font-body text-body-md" data-i18n="craft.bullet.3">Museum-grade UV protection</span>
+          </li>
+          <li class="flex items-center gap-4">
+            <span class="w-1.5 h-1.5 rounded-full" style="background: var(--accent);"></span>
+            <span class="font-body text-body-md" data-i18n="craft.bullet.4">100% Cotton fiber, acid-free substrate</span>
+          </li>
+        </ul>
+      </div>
+      <div class="md:w-1/2 order-1 md:order-2">
+        <div class="floating-card p-1 rounded-2xl">
+          <div class="aspect-square overflow-hidden rounded-xl">
+            <img alt="Close-up of premium fine-art photography print" class="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZb7838gGY6TjccMAdZOoIf5GFXzP50QOoVuBH0zq7vCx6NrWa2UfqDfcaSyYmz3zlTUrktfWLDZf2PMnRJZmyAumdqp8cXXgpxkoWCTgNWnokTAtnpU9otX0sGLmaoOFOoCcF9FLvO3weJtG8MmdIgIVr1hLktGxdhMvVsZ5Tyq75eJ5eT_-88BUrwop0Bf75V2iuHNJlIIyL9cwQbcEcBQGiEkelvQ-gJbF0RVBc7rWIFXgSXDiJRn6-Wwjc2CJV_W_oszCOOFY" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CTA -->
+<div id="journal" class="px-margin-safe w-full">
+  <section class="max-w-[1440px] mx-auto glass-panel rounded-[2.5rem] p-10 md:p-24 my-24 text-center reveal">
+    <h2 class="font-display text-3xl md:text-display-lg mb-8 uppercase tracking-[0.1em]" data-i18n="cta.title">Acquire a Fragment of Infinity</h2>
+    <p class="font-body text-body-lg text-muted mb-12 max-w-2xl mx-auto" data-i18n="cta.body">Our pieces are produced as ultra-high-definition, pigment-based prints on museum-grade Hahnemühle paper. Each work is limited to a series of twelve globally.</p>
+    <div class="flex flex-col md:flex-row justify-center gap-6">
+      <button class="pill-glass px-10 py-5 font-body text-label-sm tracking-[0.2em] uppercase transition-all hover:scale-[1.02]" style="background: var(--primary); color: var(--bg); border-color: var(--primary);" data-i18n="cta.button.catalogue">Request Catalogue</button>
+      <button class="pill-glass px-10 py-5 font-body text-label-sm tracking-[0.2em] uppercase transition-all hover:bg-white/40 dark:hover:bg-white/10" data-i18n="cta.button.consultation">Schedule Consultation</button>
+    </div>
+  </section>
+</div>
+
+<!-- Footer -->
+<div class="px-margin-safe w-full">
+  <footer class="max-w-[1440px] mx-auto glass-panel rounded-[2.5rem] p-10 md:p-20 my-24 reveal">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-12">
+      <div class="space-y-6">
+        <div class="font-display text-xl md:text-2xl tracking-[0.18em] uppercase text-primary-c">PATAGONIA AERIAL</div>
+        <p class="font-body text-label-sm tracking-[0.2em] uppercase text-faint" data-i18n="footer.tagline">Aerial photography monograph</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-20">
+        <div class="space-y-4">
+          <p class="font-body text-label-sm tracking-[0.2em] uppercase text-primary-c" data-i18n="footer.nav">Navigation</p>
+          <ul class="space-y-2 font-body text-label-sm tracking-[0.15em] uppercase text-muted">
+            <li><a href="#gallery" class="hover:text-primary-c transition-colors" data-i18n="footer.gallery">Gallery</a></li>
+            <li><a href="#" class="hover:text-primary-c transition-colors" data-i18n="footer.artist">The Artist</a></li>
+            <li><a href="#" class="hover:text-primary-c transition-colors" data-i18n="footer.stockists">Stockists</a></li>
+          </ul>
+        </div>
+        <div class="space-y-4">
+          <p class="font-body text-label-sm tracking-[0.2em] uppercase text-primary-c" data-i18n="footer.legal">Legal</p>
+          <ul class="space-y-2 font-body text-label-sm tracking-[0.15em] uppercase text-muted">
+            <li><a href="#" class="hover:text-primary-c transition-colors" data-i18n="footer.privacy">Privacy</a></li>
+            <li><a href="#" class="hover:text-primary-c transition-colors" data-i18n="footer.terms">Terms</a></li>
+            <li><a href="#" class="hover:text-primary-c transition-colors" data-i18n="footer.shipping">Shipping</a></li>
+          </ul>
+        </div>
+        <div class="space-y-4">
+          <p class="font-body text-label-sm tracking-[0.2em] uppercase text-primary-c" data-i18n="footer.social">Social</p>
+          <ul class="space-y-2 font-body text-label-sm tracking-[0.15em] uppercase text-muted">
+            <li><a href="#" class="hover:text-primary-c transition-colors">Instagram</a></li>
+            <li><a href="#" class="hover:text-primary-c transition-colors">Vimeo</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="mt-16 flex flex-col md:flex-row justify-between items-center text-[10px] tracking-[0.3em] uppercase font-body text-faint gap-4">
+      <span data-i18n="footer.rights">© 2024 Patagonia Aerial. Captured in the wild.</span>
+      <span class="flex items-center gap-2">SANTIAGO <span class="w-1 h-1 rounded-full" style="background: var(--primary);"></span> LONDON</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // ---------- i18n ----------
+  const i18n = {
+    en: {
+      "meta.title": "PATAGONIA AERIAL | The Silence of the South",
+      "nav.gallery": "Gallery",
+      "nav.expeditions": "Expeditions",
+      "nav.journal": "Journal",
+      "nav.inquire": "Inquire",
+      "hero.eyebrow": "Patagonia Aerial",
+      "hero.title": "The Silence of the South",
+      "hero.subtitle": "Limited Edition Aerial Perspectives of Patagonia",
+      "vision.eyebrow": "The Vision",
+      "vision.title": "Capturing the unseen breath of the Andes.",
+      "vision.body": "Beyond the charted paths lies a world defined by the wind and the millennial migration of clouds. Our aerial surveys capture the pure, untamed geometry of the southern edge of the world, where ice meets the ether.",
+      "vision.caption": "Fitz Roy Massif | 12,000 ft",
+      "exhibition.title": "The Exhibition",
+      "exhibition.subtitle": "Curated for the discerning eye",
+      "piece.1.serial": "001 / Serial",
+      "piece.1.title": "Glacial Arteries",
+      "piece.2.serial": "002 / Serial",
+      "piece.2.title": "The White Silence",
+      "piece.3.serial": "003 / Serial",
+      "piece.3.title": "Ethereal Plateaus",
+      "piece.4.serial": "004 / Serial",
+      "piece.4.title": "Crag & Cloud",
+      "craft.eyebrow": "The Craft",
+      "craft.title": "Master-Grade Pigment Printing",
+      "craft.body": "Each piece is rendered on archival Hahnemühle paper, chosen for its ability to hold the deep, velvet indigos of the Patagonian night. Using master-grade carbon pigments, we ensure the silence of the landscape resonates for generations.",
+      "craft.bullet.1": "Hand-signed by the artist",
+      "craft.bullet.2": "Certificate of Authenticity",
+      "craft.bullet.3": "Museum-grade UV protection",
+      "craft.bullet.4": "100% cotton fiber, acid-free substrate",
+      "cta.title": "Acquire a Fragment of Infinity",
+      "cta.body": "Our pieces are produced as ultra-high-definition, pigment-based prints on museum-grade Hahnemühle paper. Each work is limited to a series of twelve globally.",
+      "cta.button.catalogue": "Request Catalogue",
+      "cta.button.consultation": "Schedule Consultation",
+      "footer.tagline": "Aerial photography monograph",
+      "footer.nav": "Navigation",
+      "footer.gallery": "Gallery",
+      "footer.artist": "The Artist",
+      "footer.stockists": "Stockists",
+      "footer.legal": "Legal",
+      "footer.privacy": "Privacy",
+      "footer.terms": "Terms",
+      "footer.shipping": "Shipping",
+      "footer.social": "Social",
+      "footer.rights": "© 2024 Patagonia Aerial. Captured in the wild.",
+    },
+    es: {
+      "meta.title": "PATAGONIA AÉREA | El Silencio del Sur",
+      "nav.gallery": "Galería",
+      "nav.expeditions": "Expediciones",
+      "nav.journal": "Diario",
+      "nav.inquire": "Consultar",
+      "hero.eyebrow": "Patagonia Aérea",
+      "hero.title": "El Silencio del Sur",
+      "hero.subtitle": "Perspectivas Aéreas de Edición Limitada de la Patagonia",
+      "vision.eyebrow": "La Visión",
+      "vision.title": "Capturando el aliento invisible de los Andes.",
+      "vision.body": "Más allá de los caminos trazados existe un mundo definido por el viento y la migración milenaria de las nubes. Nuestros relevamientos aéreos capturan la geometría pura e indómita del confín austral del mundo, donde el hielo se encuentra con el éter.",
+      "vision.caption": "Macizo del Fitz Roy | 3.700 m",
+      "exhibition.title": "La Exhibición",
+      "exhibition.subtitle": "Curada para el ojo exigente",
+      "piece.1.serial": "001 / Serie",
+      "piece.1.title": "Arterias Glaciares",
+      "piece.2.serial": "002 / Serie",
+      "piece.2.title": "El Silencio Blanco",
+      "piece.3.serial": "003 / Serie",
+      "piece.3.title": "Mesetas Etéreas",
+      "piece.4.serial": "004 / Serie",
+      "piece.4.title": "Risco y Nube",
+      "craft.eyebrow": "El Oficio",
+      "craft.title": "Impresión Pigmentada de Grado Maestro",
+      "craft.body": "Cada pieza se imprime sobre papel de archivo Hahnemühle, elegido por su capacidad de sostener los índigos profundos y aterciopelados de la noche patagónica. Con pigmentos de carbono de grado maestro, aseguramos que el silencio del paisaje resuene por generaciones.",
+      "craft.bullet.1": "Firmado a mano por el artista",
+      "craft.bullet.2": "Certificado de Autenticidad",
+      "craft.bullet.3": "Protección UV de grado museo",
+      "craft.bullet.4": "Sustrato 100% fibra de algodón, libre de ácido",
+      "cta.title": "Adquiere un Fragmento del Infinito",
+      "cta.body": "Nuestras piezas se producen como impresiones pigmentadas de ultra alta definición sobre papel Hahnemühle de grado museo. Cada obra está limitada a una serie de doce ejemplares a nivel global.",
+      "cta.button.catalogue": "Solicitar Catálogo",
+      "cta.button.consultation": "Agendar Consulta",
+      "footer.tagline": "Monografía de fotografía aérea",
+      "footer.nav": "Navegación",
+      "footer.gallery": "Galería",
+      "footer.artist": "El Artista",
+      "footer.stockists": "Distribuidores",
+      "footer.legal": "Legal",
+      "footer.privacy": "Privacidad",
+      "footer.terms": "Términos",
+      "footer.shipping": "Envíos",
+      "footer.social": "Social",
+      "footer.rights": "© 2024 Patagonia Aérea. Capturado en lo salvaje.",
+    },
+  };
+
+  function setLang(lang) {
+    if (!i18n[lang]) return;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      const val = i18n[lang][key];
+      if (val == null) return;
+      if (el.tagName === 'TITLE') el.textContent = val;
+      else el.textContent = val;
+    });
+    document.querySelectorAll('[data-lang]').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+  }
+  document.querySelectorAll('[data-lang]').forEach((btn) => {
+    btn.addEventListener('click', () => setLang(btn.dataset.lang));
+  });
+
+  // ---------- theme ----------
+  const themeBtn = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const videoLight = document.getElementById('video-light');
+  const videoDark  = document.getElementById('video-dark');
+
+  function setTheme(isDark) {
+    document.documentElement.classList.toggle('dark', isDark);
+    themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
+    if (isDark) {
+      videoDark.play();
+      setTimeout(() => videoLight.pause(), 1000);   // pausa tras el fade-out
+    } else {
+      videoLight.play();
+      setTimeout(() => videoDark.pause(), 1000);
+    }
+  }
+  themeBtn.addEventListener('click', () => {
+    setTheme(!document.documentElement.classList.contains('dark'));
+  });
+
+  // ---------- reveal on scroll ----------
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('active');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+  // ---------- nav scroll state ----------
+  const navEl = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    navEl.classList.toggle('is-scrolled', window.scrollY > 50);
+  });
+
+  // ---------- init ----------
+  setLang('en');
+  setTheme(false);
+</script>
+
+</body>
+</html>
