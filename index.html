@@ -486,16 +486,14 @@
   const loaderDots = loader.querySelectorAll('.loader-dots span');
   const N = loaderDots.length; // 9
   const SIGMA = 1.6;           // ancho de la ola (puntos activos simultáneos)
-  const SPEED = 0.05;          // velocidad de viaje
+  const SPEED = 0.09;          // velocidad de viaje
   const LIFT  = 20;            // px hacia arriba
   let   t     = 0;
   let   animFrame;
 
   function animateDots() {
-    // pico viaja 0 → N-1 → 0 (onda triangular)
-    const cycle = 2 * (N - 1);
-    const raw   = t % cycle;
-    const peak  = raw <= N - 1 ? raw : cycle - raw;
+    // pico viaja 0 → N-1 y vuelve a empezar (loop continuo)
+    const peak = t % N;
 
     loaderDots.forEach((d, i) => {
       const dist   = i - peak;
