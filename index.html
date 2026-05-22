@@ -193,6 +193,17 @@
   .lang-btn { transition: color 0.3s ease; color: var(--text-faint); }
   .lang-btn.active { color: var(--primary); font-weight: 600; }
 
+  /* ── BlurInUp por caracter ── */
+  @keyframes blurInUp {
+    from { opacity: 0; filter: blur(10px); transform: translateY(14px); }
+    to   { opacity: 1; filter: blur(0px);  transform: translateY(0px);  }
+  }
+  .blur-char {
+    display: inline-block;
+    opacity: 0;
+    animation: blurInUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
@@ -510,7 +521,12 @@
   function hideLoader() {
     cancelAnimationFrame(animFrame);
     loader.classList.add('hidden');
-    setTimeout(() => loader.remove(), 750);
+    setTimeout(() => {
+      loader.remove();
+      // Animar H1 del hero cuando el loader desaparece
+      const heroH1 = document.querySelector('h1[data-i18n]');
+      if (heroH1) splitBlurInUp(heroH1, 0.1);
+    }, 750);
   }
 
   // 4 s mínimo, o cuando el video light ya puede reproducirse
@@ -622,13 +638,23 @@
   function setLang(lang) {
     if (!i18n[lang]) return;
     document.documentElement.lang = lang;
+
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       const key = el.getAttribute('data-i18n');
       const val = i18n[lang][key];
       if (val == null) return;
-      if (el.tagName === 'TITLE') el.textContent = val;
-      else el.textContent = val;
+      el.textContent = val; // limpia los spans antes de re-animar
     });
+
+    // Re-animar H1 del hero
+    const heroH1 = document.querySelector('h1[data-i18n]');
+    if (heroH1) splitBlurInUp(heroH1, 0.1);
+
+    // Re-animar H2/H3 ya visibles
+    document.querySelectorAll('.reveal.active h2[data-i18n], .reveal.active h3[data-i18n]').forEach(h => {
+      splitBlurInUp(h);
+    });
+
     document.querySelectorAll('[data-lang]').forEach((btn) => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
@@ -658,11 +684,28 @@
     setTheme(!document.documentElement.classList.contains('dark'));
   });
 
+  // ---------- blurInUp por caracter ----------
+  function splitBlurInUp(el, baseDelay = 0) {
+    const text = el.textContent;
+    el.innerHTML = '';
+    [...text].forEach((char, i) => {
+      const span = document.createElement('span');
+      span.className = 'blur-char';
+      span.style.animationDelay = `${(baseDelay + i * 0.045).toFixed(3)}s`;
+      span.textContent = char === ' ' ? ' ' : char;
+      el.appendChild(span);
+    });
+  }
+
   // ---------- reveal on scroll ----------
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) {
         e.target.classList.add('active');
+        // Animar headings dentro de la sección revelada
+        e.target.querySelectorAll('h2[data-i18n], h3[data-i18n]').forEach(h => {
+          splitBlurInUp(h);
+        });
         io.unobserve(e.target);
       }
     });
