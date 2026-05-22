@@ -362,6 +362,8 @@ header.hero {
 .hero-content {
   position: relative; z-index: 10; text-align: center;
   max-width: 56rem; color: var(--pa-hero-text);
+  /* hidden until loader finishes — avoids flash of raw text */
+  opacity: 0;
 }
 .hero-eyebrow {
   font-family: var(--pa-font-body);
@@ -388,13 +390,22 @@ header.hero {
   letter-spacing: var(--pa-track-loud);
   text-transform: uppercase;
   color: var(--pa-hero-text);
-  opacity: 0.9;
+  opacity: 0;
   margin: 0 0 48px;
+  transition: opacity 0.9s var(--pa-ease-out);
 }
+.hero-content.revealed .hero-sub { opacity: 0.9; transition-delay: 1.6s; }
 .hero-rule {
   display: inline-block; width: 1px; height: 96px;
   background: linear-gradient(to bottom, var(--pa-hero-text), transparent);
-  animation: heroPulse 3.2s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.8s var(--pa-ease-out);
+  animation: none;
+}
+.hero-content.revealed .hero-rule {
+  opacity: 1;
+  transition-delay: 1.9s;
+  animation: heroPulse 3.2s ease-in-out 2.4s infinite;
 }
 @keyframes heroPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 .hero-coords {
@@ -1064,10 +1075,19 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     loader.classList.add('hidden');
     setTimeout(() => {
       loader.remove();
-      const heroEy = document.querySelector('.hero-eyebrow');
-      const heroH1 = document.querySelector('.hero-h1');
-      if (heroEy) splitBlurInUp(heroEy, 0);
-      if (heroH1) splitBlurInUp(heroH1, 0.3);
+      // 1. Reveal hero container instantly (no transition on wrapper — chars animate in individually)
+      const heroContent = document.querySelector('.hero-content');
+      if (heroContent) {
+        heroContent.style.opacity = '1';
+        // 2. Animate eyebrow + H1 char-by-char
+        const heroEy = heroContent.querySelector('.hero-eyebrow');
+        const heroH1 = heroContent.querySelector('.hero-h1');
+        if (heroEy) splitBlurInUp(heroEy, 0);
+        if (heroH1) splitBlurInUp(heroH1, 0.3);
+        // 3. Sub + rule fade in via CSS transitions (triggered by class)
+        requestAnimationFrame(() => heroContent.classList.add('revealed'));
+      }
+      // 4. Nav slides in after H1 finishes animating
       setTimeout(() => document.getElementById('nav-wrap').classList.add('visible'), 1900);
     }, 750);
   }
