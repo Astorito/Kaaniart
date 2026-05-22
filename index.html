@@ -237,7 +237,7 @@
     background: #1a1c1c;
     opacity: 0.18;
     transform: translateY(0);
-    transition: transform 0.11s ease, opacity 0.11s ease;
+    will-change: transform, opacity;
   }
 </style>
 </head>
@@ -484,25 +484,33 @@
   // ---------- loader ----------
   const loader = document.getElementById('loader');
   const loaderDots = loader.querySelectorAll('.loader-dots span');
-  let dotIndex = 0;
-  let dotDir = 1;
+  const N = loaderDots.length; // 9
+  const SIGMA = 1.6;           // ancho de la ola (puntos activos simultáneos)
+  const SPEED = 0.05;          // velocidad de viaje
+  const LIFT  = 20;            // px hacia arriba
+  let   t     = 0;
+  let   animFrame;
 
-  // Activa un solo punto a la vez, viajando de punta a punta
-  const dotTick = setInterval(() => {
-    loaderDots.forEach(d => {
-      d.style.transform = 'translateY(0)';
-      d.style.opacity   = '0.18';
+  function animateDots() {
+    // pico viaja 0 → N-1 → 0 (onda triangular)
+    const cycle = 2 * (N - 1);
+    const raw   = t % cycle;
+    const peak  = raw <= N - 1 ? raw : cycle - raw;
+
+    loaderDots.forEach((d, i) => {
+      const dist   = i - peak;
+      const factor = Math.exp(-0.5 * (dist / SIGMA) ** 2);
+      d.style.transform = `translateY(${(-LIFT * factor).toFixed(2)}px)`;
+      d.style.opacity   = (0.15 + 0.85 * factor).toFixed(3);
     });
-    loaderDots[dotIndex].style.transform = 'translateY(-20px)';
-    loaderDots[dotIndex].style.opacity   = '1';
 
-    dotIndex += dotDir;
-    if (dotIndex === loaderDots.length - 1) dotDir = -1;
-    if (dotIndex === 0)                     dotDir =  1;
-  }, 120);
+    t += SPEED;
+    animFrame = requestAnimationFrame(animateDots);
+  }
+  animateDots();
 
   function hideLoader() {
-    clearInterval(dotTick);
+    cancelAnimationFrame(animFrame);
     loader.classList.add('hidden');
     setTimeout(() => loader.remove(), 750);
   }
