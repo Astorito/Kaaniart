@@ -285,7 +285,7 @@ html.dark .panel.alt { background: rgba(255,255,255,0.02); }
 }
 #nav-wrap.visible { opacity: 1; transform: translateY(0); }
 nav.bar {
-  width: 100%; max-width: var(--pa-container-max);
+  width: 70%; max-width: calc(var(--pa-container-max) * 0.7);
   padding: 10px 24px;
   display: flex; align-items: center; gap: 18px;
 }
@@ -1048,12 +1048,7 @@ html.dark .foot-logo { filter: invert(1); }
   }
 
   let loaderGone = false;
-  const minTimer = setTimeout(() => { loaderGone=true; hideLoader(); }, 2400);
-  videoLight.addEventListener('canplaythrough', () => {
-    if (loaderGone) return;
-    clearTimeout(minTimer); loaderGone=true;
-    setTimeout(hideLoader, 1600);
-  }, { once:true });
+  const minTimer = setTimeout(() => { loaderGone=true; hideLoader(); }, 4000);
 
   // ── Reveal on scroll ──
   const io = new IntersectionObserver((entries) => {
