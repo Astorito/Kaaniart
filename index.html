@@ -138,6 +138,7 @@ html.dark .stage-bg {
   position: fixed; inset: 0; width: 100%; height: 100%;
   object-fit: cover; z-index: -2; opacity: 0;
   transition: opacity 1s ease; pointer-events: none;
+  will-change: opacity;
 }
 #video-light { opacity: 1; }
 html.dark #video-light { opacity: 0; }
@@ -176,6 +177,8 @@ html.dark .mist-layer { opacity: 0; }
 .panel {
   max-width: var(--pa-container-max);
   margin: 96px auto;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
   padding: 40px;
   background: var(--pa-glass-bg);
   backdrop-filter: var(--pa-blur-glass);
@@ -595,11 +598,13 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 
 <!-- Background stack -->
 <div class="stage-bg" aria-hidden="true"></div>
-<video id="video-light" class="page-bg-video" autoplay muted loop playsinline>
+<!-- Light video: loads immediately (active by default) -->
+<video id="video-light" class="page-bg-video" autoplay muted loop playsinline preload="auto">
   <source src="https://3pkq56v0opvauhlc.public.blob.vercel-storage.com/Landing%202%20aerea.mp4" type="video/mp4" />
 </video>
-<video id="video-dark" class="page-bg-video" autoplay muted loop playsinline>
-  <source src="https://3pkq56v0opvauhlc.public.blob.vercel-storage.com/Nocturna.mp4" type="video/mp4" />
+<!-- Dark video: lazy — src injected only when dark mode first activated -->
+<video id="video-dark" class="page-bg-video" muted loop playsinline preload="none">
+  <source data-src="https://3pkq56v0opvauhlc.public.blob.vercel-storage.com/Nocturna.mp4" type="video/mp4" />
 </video>
 <div class="page-vignette" aria-hidden="true"></div>
 <div class="mist-layer" id="mist" aria-hidden="true">
@@ -1000,12 +1005,32 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   const themeIcon  = document.getElementById('theme-icon');
   const videoLight = document.getElementById('video-light');
   const videoDark  = document.getElementById('video-dark');
+  let darkVideoLoaded = false;
+  function loadDarkVideo() {
+    if (darkVideoLoaded) return;
+    darkVideoLoaded = true;
+    const src = videoDark.querySelector('source[data-src]');
+    if (src) { src.src = src.dataset.src; videoDark.load(); }
+  }
+
   function applyTheme() {
     document.documentElement.classList.toggle('dark', state.dark);
     themeIcon.textContent = state.dark ? 'light_mode' : 'dark_mode';
-    if (state.dark) { videoDark.play().catch(()=>{}); setTimeout(()=>videoLight.pause(),1000); }
-    else            { videoLight.play().catch(()=>{}); setTimeout(()=>videoDark.pause(),1000); }
+    if (state.dark) {
+      loadDarkVideo();
+      videoDark.play().catch(()=>{});
+      setTimeout(()=>{ videoLight.pause(); }, 1000);
+    } else {
+      videoLight.play().catch(()=>{});
+      setTimeout(()=>{ if (!state.dark) videoDark.pause(); }, 1000);
+    }
   }
+
+  // Pause active video when tab is hidden, resume when visible
+  document.addEventListener('visibilitychange', () => {
+    const active = state.dark ? videoDark : videoLight;
+    document.hidden ? active.pause() : active.play().catch(()=>{});
+  });
 
   // ── Mist ──
   function applyMist() {
@@ -1048,7 +1073,16 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   }
 
   let loaderGone = false;
-  const minTimer = setTimeout(() => { loaderGone=true; hideLoader(); }, 4000);
+  const minTimer = setTimeout(() => {
+    loaderGone = true;
+    hideLoader();
+    // Prefetch dark video in background after loader, without blocking
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => loadDarkVideo(), { timeout: 5000 });
+    } else {
+      setTimeout(loadDarkVideo, 5000);
+    }
+  }, 4000);
 
   // ── Reveal on scroll ──
   const io = new IntersectionObserver((entries) => {
