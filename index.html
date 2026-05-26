@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PUELCHE GALLERY · The Silence of the South</title>
+<title>Puelche Gallery</title>
+<link rel="icon" href="assets/logo-mark.png" type="image/png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -97,7 +98,7 @@ html.dark {
 /* ==========================================================================
    Reset + base
    ========================================================================== */
-*,*::before,*::after { box-sizing: border-box; }
+*,*::before,*::after { box-sizing: border-box; word-break: normal; hyphens: none; overflow-wrap: break-word; }
 html, body { min-height: 100vh; margin: 0; padding: 0; }
 body {
   background-color: var(--pa-bg);
@@ -664,8 +665,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 <header class="hero">
   <div class="hero-content">
     <span class="hero-eyebrow cinematic-shadow" data-i18n="hero.eyebrow">Puelche Gallery · Patagonia Aerial</span>
-    <h1 class="hero-h1 cinematic-shadow" data-i18n="hero.title">The Silence of the South</h1>
-    <p class="hero-sub cinematic-shadow" data-i18n="hero.subtitle">Limited Edition Aerial Perspectives of Patagonia</p>
+    <h1 class="hero-h1 cinematic-shadow" data-i18n="hero.title">Aerial art from Patagonia</h1>
     <span class="hero-rule" aria-hidden="true"></span>
   </div>
   <div class="hero-coords cinematic-shadow">
@@ -901,8 +901,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     en: {
       "nav.gallery":"Gallery","nav.craft":"Craft","nav.inquire":"Inquire",
       "hero.eyebrow":"Puelche Gallery · Patagonia Aerial",
-      "hero.title":"The Silence of the South",
-      "hero.subtitle":"Limited Edition Aerial Perspectives of Patagonia",
+      "hero.title":"Aerial art from Patagonia",
       "hero.coord.lat":"49°16′ S","hero.coord.lon":"73°02′ W",
       "hero.edition":"Edition VII · Twelve only",
       "vision.eyebrow":"The Vision",
@@ -933,8 +932,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     es: {
       "nav.gallery":"Galería","nav.craft":"Oficio","nav.inquire":"Consultar",
       "hero.eyebrow":"Puelche Galería · Patagonia Aérea",
-      "hero.title":"El Silencio del Sur",
-      "hero.subtitle":"Perspectivas Aéreas de Edición Limitada de la Patagonia",
+      "hero.title":"Arte aéreo de la Patagonia",
       "hero.coord.lat":"49°16′ S","hero.coord.lon":"73°02′ O",
       "hero.edition":"Edición VII · Sólo doce",
       "vision.eyebrow":"La Visión",
@@ -966,8 +964,8 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 
   const heroVariants = {
     "silence": {
-      en: { eyebrow:"Puelche Gallery · Patagonia Aerial", title:"The Silence of the South", sub:"Limited Edition Aerial Perspectives of Patagonia" },
-      es: { eyebrow:"Puelche Galería · Patagonia Aérea", title:"El Silencio del Sur", sub:"Perspectivas Aéreas de Edición Limitada de la Patagonia" }
+      en: { eyebrow:"Puelche Gallery · Patagonia Aerial", title:"Aerial art from Patagonia", sub:"" },
+      es: { eyebrow:"Puelche Galería · Patagonia Aérea", title:"Arte aéreo de la Patagonia", sub:"" }
     },
     "fragment": {
       en: { eyebrow:"Puelche Gallery · A Monograph", title:"Acquire a Fragment of Infinity", sub:"Twelve editions. One sky. Hand-numbered." },
@@ -1006,7 +1004,6 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     if (v) {
       document.querySelector('.hero-eyebrow').textContent = v.eyebrow;
       document.querySelector('.hero-h1').textContent = v.title;
-      document.querySelector('.hero-sub').textContent = v.sub;
     }
     document.querySelectorAll('.reveal.active .headline, .reveal.active .display-1, .reveal.active .subhead')
       .forEach(h => splitBlurInUp(h));
@@ -1306,7 +1303,7 @@ function TweaksApp() {
       <TweakRadio label="Voice" value={t.lang} options={['en','es']} onChange={v=>setTweak('lang',v)} />
       <TweakSection label="Hero" />
       <TweakSelect label="Title variant" value={t.heroVariant}
-        options={[{label:'Silence of the South',value:'silence'},{label:'Fragment of Infinity',value:'fragment'},{label:'Unseen Breath',value:'breath'}]}
+        options={[{label:'Aerial art from Patagonia',value:'silence'},{label:'Fragment of Infinity',value:'fragment'},{label:'Unseen Breath',value:'breath'}]}
         onChange={v=>setTweak('heroVariant',v)} />
       <TweakSection label="Exhibition" />
       <TweakRadio label="Pieces" value={String(t.exhibitCount)} options={['4','6','8']} onChange={v=>setTweak('exhibitCount',Number(v))} />
