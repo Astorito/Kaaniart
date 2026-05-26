@@ -235,6 +235,8 @@ html.dark .panel.alt { background: rgba(255,255,255,0.02); }
   font-family: var(--pa-font-headline);
   font-size: clamp(32px, 4vw, 48px);
   font-weight: 400;
+  hyphens: none;
+  word-break: keep-all;
   line-height: var(--pa-lh-headline);
   color: var(--pa-text);
   margin: 0;
@@ -447,6 +449,20 @@ header.hero {
 @media (min-width: 768px) { .grid12 { grid-template-columns: repeat(12, 1fr); align-items: center; } }
 .col5 { grid-column: span 5; }
 .col6-start7 { grid-column: 7 / span 6; }
+
+/* Vision: fit one full viewport height */
+.vision-wrap {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0 var(--pa-margin-safe);
+}
+.vision-wrap > .panel {
+  margin: 0 auto;
+  width: 100%;
+  padding: 48px;
+}
+@media (min-width: 768px) { .vision-wrap > .panel { padding: 64px; } }
 .img-frame {
   overflow: hidden;
   border-radius: var(--pa-radius-lg);
@@ -694,7 +710,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 </header>
 
 <!-- The Vision -->
-<div class="safe">
+<div class="vision-wrap">
   <section class="panel grid12 reveal" id="vision">
     <div class="col5">
       <span class="eyebrow" data-i18n="vision.eyebrow">The Vision</span>
@@ -703,11 +719,11 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     </div>
     <div class="col6-start7">
       <div class="card img-card-lg">
-        <div class="img-frame aspect-23">
-          <img src="assets/p4-fitz-river.jpg" alt="Fitz Roy Massif" />
+        <div class="img-frame aspect-45">
+          <img src="assets/p4-fitz-river.jpg" alt="Fitz Roy Massif" style="object-position: center 30%;" />
         </div>
       </div>
-      <p class="caption" style="margin-top:24px;" data-i18n="vision.caption">Volcán Lanín | 12,000 ft</p>
+      <p class="caption" style="margin-top:16px;" data-i18n="vision.caption">Volcán Lanín | 12,000 ft</p>
     </div>
   </section>
 </div>
