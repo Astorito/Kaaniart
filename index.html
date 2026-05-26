@@ -465,6 +465,10 @@ header.hero {
   padding: 48px;
 }
 @media (min-width: 768px) { .vision-wrap > .panel { padding: 64px; } }
+/* Vision text column: 7 of 12 so headline has room to breathe */
+#vision .col5      { grid-column: span 7; }
+#vision .col6-start7 { grid-column: 9 / span 4; }
+#vision .headline  { font-size: clamp(28px, 3.2vw, 44px); }
 .img-frame {
   overflow: hidden;
   border-radius: var(--pa-radius-lg);
