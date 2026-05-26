@@ -99,6 +99,7 @@ html.dark {
    Reset + base
    ========================================================================== */
 *,*::before,*::after { box-sizing: border-box; word-break: normal; hyphens: none; overflow-wrap: break-word; }
+h1,h2,h3,h4,h5,h6 { hyphens: none !important; word-break: normal; overflow-wrap: normal; }
 html, body { min-height: 100vh; margin: 0; padding: 0; }
 body {
   background-color: var(--pa-bg);
@@ -235,8 +236,9 @@ html.dark .panel.alt { background: rgba(255,255,255,0.02); }
   font-family: var(--pa-font-headline);
   font-size: clamp(32px, 4vw, 48px);
   font-weight: 400;
-  hyphens: none;
-  word-break: keep-all;
+  hyphens: none !important;
+  word-break: normal;
+  overflow-wrap: normal;
   line-height: var(--pa-lh-headline);
   color: var(--pa-text);
   margin: 0;
