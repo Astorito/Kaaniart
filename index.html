@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>KAANI GALERY · The Silence of the South</title>
+<title>PUELCHE GALLERY · The Silence of the South</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -611,7 +611,8 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 <div class="stage-bg" aria-hidden="true"></div>
 <!-- Light video: loads immediately (active by default) -->
 <video id="video-light" class="page-bg-video" autoplay muted loop playsinline preload="auto">
-  <source src="assets/landing-light.mp4" type="video/mp4" />
+  <source src="assets/landing-light.webm" type="video/webm" />
+  <source src="assets/landing-light.mp4"  type="video/mp4"  />
 </video>
 <!-- Dark video: lazy — src injected only when dark mode first activated -->
 <video id="video-dark" class="page-bg-video" muted loop playsinline preload="none">
@@ -632,13 +633,13 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     <span></span><span></span><span></span>
     <span></span><span></span><span></span>
   </div>
-  <div class="loader-meta">Kaani Galery · Patagonia Aerial · 2026</div>
+  <div class="loader-meta">Puelche Gallery · Patagonia Aerial · 2026</div>
 </div>
 
 <!-- Floating Nav -->
 <div id="nav-wrap">
   <nav class="bar pill">
-    <a class="nav-mark" href="#" aria-label="Kaani Galery">
+    <a class="nav-mark" href="#" aria-label="Puelche Gallery">
       <img src="assets/logo-mark.png" alt="" />
     </a>
     <div class="nav-links">
@@ -662,7 +663,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 <!-- Hero -->
 <header class="hero">
   <div class="hero-content">
-    <span class="hero-eyebrow cinematic-shadow" data-i18n="hero.eyebrow">Kaani Galery · Patagonia Aerial</span>
+    <span class="hero-eyebrow cinematic-shadow" data-i18n="hero.eyebrow">Puelche Gallery · Patagonia Aerial</span>
     <h1 class="hero-h1 cinematic-shadow" data-i18n="hero.title">The Silence of the South</h1>
     <p class="hero-sub cinematic-shadow" data-i18n="hero.subtitle">Limited Edition Aerial Perspectives of Patagonia</p>
     <span class="hero-rule" aria-hidden="true"></span>
@@ -857,7 +858,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   <footer class="panel foot reveal">
     <div class="foot-top">
       <div>
-        <img class="foot-logo" src="assets/logo-mark.png" alt="Kaani Galery" />
+        <img class="foot-logo" src="assets/logo-mark.png" alt="Puelche Gallery" />
         <p class="caption" style="margin-top:24px;" data-i18n="footer.tagline">Aerial photography monograph</p>
       </div>
       <div class="foot-cols">
@@ -886,7 +887,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
       </div>
     </div>
     <div class="foot-base">
-      <span data-i18n="footer.rights">© 2026 Kaani Galery. Captured in the wild.</span>
+      <span data-i18n="footer.rights">© 2026 Puelche Gallery. Captured in the wild.</span>
       <span class="foot-cities">Santiago <span class="dot" aria-hidden="true"></span> London</span>
     </div>
   </footer>
@@ -899,7 +900,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   const i18n = {
     en: {
       "nav.gallery":"Gallery","nav.craft":"Craft","nav.inquire":"Inquire",
-      "hero.eyebrow":"Kaani Galery · Patagonia Aerial",
+      "hero.eyebrow":"Puelche Gallery · Patagonia Aerial",
       "hero.title":"The Silence of the South",
       "hero.subtitle":"Limited Edition Aerial Perspectives of Patagonia",
       "hero.coord.lat":"49°16′ S","hero.coord.lon":"73°02′ W",
@@ -927,11 +928,11 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
       "footer.tagline":"Aerial photography monograph","footer.nav":"Navigation",
       "footer.gallery":"Gallery","footer.artist":"The Artist","footer.legal":"Legal",
       "footer.privacy":"Privacy","footer.terms":"Terms","footer.shipping":"Shipping",
-      "footer.social":"Social","footer.rights":"© 2026 Kaani Galery. Captured in the wild."
+      "footer.social":"Social","footer.rights":"© 2026 Puelche Gallery. Captured in the wild."
     },
     es: {
       "nav.gallery":"Galería","nav.craft":"Oficio","nav.inquire":"Consultar",
-      "hero.eyebrow":"Kaani Galería · Patagonia Aérea",
+      "hero.eyebrow":"Puelche Galería · Patagonia Aérea",
       "hero.title":"El Silencio del Sur",
       "hero.subtitle":"Perspectivas Aéreas de Edición Limitada de la Patagonia",
       "hero.coord.lat":"49°16′ S","hero.coord.lon":"73°02′ O",
@@ -959,22 +960,22 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
       "footer.tagline":"Monografía de fotografía aérea","footer.nav":"Navegación",
       "footer.gallery":"Galería","footer.artist":"El Artista","footer.legal":"Legal",
       "footer.privacy":"Privacidad","footer.terms":"Términos","footer.shipping":"Envíos",
-      "footer.social":"Social","footer.rights":"© 2026 Kaani Galería. Capturado en lo salvaje."
+      "footer.social":"Social","footer.rights":"© 2026 Puelche Galería. Capturado en lo salvaje."
     }
   };
 
   const heroVariants = {
     "silence": {
-      en: { eyebrow:"Kaani Galery · Patagonia Aerial", title:"The Silence of the South", sub:"Limited Edition Aerial Perspectives of Patagonia" },
-      es: { eyebrow:"Kaani Galería · Patagonia Aérea", title:"El Silencio del Sur", sub:"Perspectivas Aéreas de Edición Limitada de la Patagonia" }
+      en: { eyebrow:"Puelche Gallery · Patagonia Aerial", title:"The Silence of the South", sub:"Limited Edition Aerial Perspectives of Patagonia" },
+      es: { eyebrow:"Puelche Galería · Patagonia Aérea", title:"El Silencio del Sur", sub:"Perspectivas Aéreas de Edición Limitada de la Patagonia" }
     },
     "fragment": {
-      en: { eyebrow:"Kaani Galery · A Monograph", title:"Acquire a Fragment of Infinity", sub:"Twelve editions. One sky. Hand-numbered." },
-      es: { eyebrow:"Kaani Galería · Una Monografía", title:"Un Fragmento del Infinito", sub:"Doce ediciones. Un solo cielo. Numeradas a mano." }
+      en: { eyebrow:"Puelche Gallery · A Monograph", title:"Acquire a Fragment of Infinity", sub:"Twelve editions. One sky. Hand-numbered." },
+      es: { eyebrow:"Puelche Galería · Una Monografía", title:"Un Fragmento del Infinito", sub:"Doce ediciones. Un solo cielo. Numeradas a mano." }
     },
     "breath": {
-      en: { eyebrow:"Kaani Galery · The Andean Cordillera", title:"Aerial art from the end of the world.", sub:"Granite · Glacier · Ether" },
-      es: { eyebrow:"Kaani Galería · La Cordillera Andina", title:"Arte aéreo del fin del mundo.", sub:"Granito · Glaciar · Éter" }
+      en: { eyebrow:"Puelche Gallery · The Andean Cordillera", title:"Aerial art from the end of the world.", sub:"Granite · Glacier · Ether" },
+      es: { eyebrow:"Puelche Galería · La Cordillera Andina", title:"Arte aéreo del fin del mundo.", sub:"Granito · Glaciar · Éter" }
     }
   };
 
@@ -1297,7 +1298,7 @@ function TweaksApp() {
   React.useEffect(()=>window.kg.setHeroVariant(t.heroVariant),[t.heroVariant]);
   React.useEffect(()=>window.kg.setExhibitCount(Number(t.exhibitCount)),[t.exhibitCount]);
   return (
-    <TweaksPanel title="Kaani Tweaks">
+    <TweaksPanel title="Puelche Tweaks">
       <TweakSection label="Atmosphere" />
       <TweakToggle label="Dark mode" value={t.dark} onChange={v=>setTweak('dark',v)} />
       <TweakSlider label="Mist" value={Math.round(t.mistOpacity*100)} min={0} max={100} unit="%" onChange={v=>setTweak('mistOpacity',v/100)} />
