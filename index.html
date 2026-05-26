@@ -634,6 +634,40 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   letter-spacing: var(--pa-track-loud); text-transform: uppercase;
   color: #1a1c1c; opacity: 0.3;
 }
+
+/* ==========================================================================
+   Lightbox
+   ========================================================================== */
+#lightbox {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s var(--pa-ease-out);
+}
+#lightbox.open { opacity: 1; pointer-events: all; }
+#lightbox img {
+  max-width: min(90vw, 1200px);
+  max-height: 88vh;
+  width: auto; height: auto;
+  border-radius: 12px;
+  object-fit: contain;
+  transform: scale(0.94);
+  transition: transform 0.4s var(--pa-ease-out);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+}
+#lightbox.open img { transform: scale(1); }
+#lightbox-close {
+  position: absolute; top: 20px; right: 24px;
+  font-family: var(--pa-font-icon); font-size: 28px;
+  color: rgba(255,255,255,0.6); cursor: pointer;
+  line-height: 1; background: none; border: none; padding: 8px;
+  transition: color 0.2s;
+}
+#lightbox-close:hover { color: #fff; }
+.exhibit-grid .piece { cursor: zoom-in; }
 </style>
 </head>
 <body>
@@ -654,6 +688,12 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   <div class="mist-blob b1"></div>
   <div class="mist-blob b2"></div>
   <div class="mist-blob b3"></div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <button id="lightbox-close" aria-label="Close">close</button>
+  <img id="lightbox-img" src="" alt="" />
 </div>
 
 <!-- Loader -->
@@ -1144,6 +1184,31 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ── Lightbox ──
+  const lightbox    = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  function openLightbox(src, alt) {
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => { lightboxImg.src = ''; }, 350);
+  }
+
+  document.querySelector('.exhibit-grid').addEventListener('click', e => {
+    const img = e.target.closest('.piece')?.querySelector('img');
+    if (img) openLightbox(img.src, img.alt);
+  });
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  lightboxClose.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
   // ── Nav scroll ──
   const navEl = document.querySelector('nav.bar');
