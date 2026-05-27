@@ -98,7 +98,7 @@ html.dark {
 /* ==========================================================================
    Reset + base
    ========================================================================== */
-*,*::before,*::after { box-sizing: border-box; word-break: normal; hyphens: none; overflow-wrap: break-word; }
+*,*::before,*::after { box-sizing: border-box; word-break: normal; hyphens: none; overflow-wrap: normal; }
 h1,h2,h3,h4,h5,h6 { hyphens: none !important; word-break: normal; overflow-wrap: normal; }
 html, body { min-height: 100vh; margin: 0; padding: 0; }
 body {
@@ -659,11 +659,13 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 /* Track — slides scroll horizontally */
 #lb-track {
   position: relative;
-  width: min(90vw, 1200px);
-  max-height: 82vh;
-  overflow: hidden;
+  width: min(88vw, 1100px);
+  max-height: 85vh;
+  overflow: visible;
   border-radius: 12px;
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #lb-track img {
   width: 100%; height: 100%;
@@ -724,11 +726,9 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 
 /* ── Mockup room slides (CSS-rendered frames) ── */
 .lb-mockup {
-  width: min(90vw, 1200px);
-  max-height: 82vh;
-  height: 74vh;
+  width: min(88vw, 1100px);
+  height: 72vh;
   border-radius: 12px;
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -753,12 +753,14 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   border-top: 1px solid rgba(140,110,80,0.12);
 }
 
-/* Dark wall — brushed concrete */
+/* Dark wall — raw concrete + overhead spot */
 .lb-mockup--dark {
-  background: #17181d;
+  background: #2b2b2b;
   background-image:
-    radial-gradient(ellipse at 50% -10%, rgba(80,90,120,0.25) 0%, transparent 60%),
-    repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255,255,255,0.012) 4px, rgba(255,255,255,0.012) 5px);
+    radial-gradient(ellipse 55% 35% at 50% 0%, rgba(255,255,220,0.11) 0%, transparent 65%),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 3px),
+    repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(255,255,255,0.02) 5px, rgba(255,255,255,0.02) 6px),
+    radial-gradient(ellipse at 50% 55%, transparent 40%, rgba(0,0,0,0.32) 100%);
 }
 .lb-mockup--dark::after {
   content: '';
@@ -785,7 +787,8 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   background: #f4efe6;
 }
 .lb-mockup--dark .lb-mockup-mat {
-  background: #e8e4dc;
+  background: #f0ece4;
+  padding: 20px;
 }
 
 /* Outer frame */
@@ -803,21 +806,21 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   background: linear-gradient(160deg, #3a2e25 0%, #241d16 60%, #1e1812 100%);
 }
 .lb-mockup--dark .lb-mockup-frame {
-  background: linear-gradient(160deg, #141416 0%, #0e0e10 60%, #111114 100%);
+  background: #060606;
+  padding: 14px;
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.06),
-    0 0 0 2px rgba(180,170,140,0.12),
-    0 30px 90px rgba(0,0,0,0.7),
-    0 8px 24px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -1px 0 rgba(0,0,0,0.5);
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 40px 100px rgba(0,0,0,0.85),
+    0 12px 32px rgba(0,0,0,0.65),
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    inset 0 -2px 0 rgba(0,0,0,0.8);
 }
 
 /* The photo inside the frame */
 .lb-mockup-photo {
   display: block;
-  max-width: 52vw;
-  max-height: 52vh;
+  max-width: min(34vw, 520px);
+  max-height: min(42vh, 400px);
   width: auto; height: auto;
   object-fit: contain;
 }
@@ -852,6 +855,41 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 }
 .lb-mockup--warm .lb-mockup-label { color: rgba(80,60,40,0.45); }
 .lb-mockup--dark  .lb-mockup-label { color: rgba(200,190,170,0.3); }
+
+/* ==========================================================================
+   Mobile overrides  (max-width: 767px)
+   ========================================================================== */
+@media (max-width: 767px) {
+  /* Grid columns stack full-width */
+  .col5,
+  .col6-start7 { grid-column: 1 / -1 !important; }
+
+  /* Vision: no forced full height on phone */
+  .vision-wrap { min-height: auto; }
+  .vision-wrap > .panel { padding: 32px 20px; }
+
+  /* Hero */
+  .hero-h1 { font-size: clamp(30px, 8.5vw, 46px); margin-bottom: 28px; }
+  .hero-eyebrow { letter-spacing: 0.2em; }
+
+  /* Panels narrower padding */
+  .panel { padding: 28px 20px; margin: 48px auto; }
+
+  /* Footer */
+  .footer-grid { flex-direction: column; gap: 28px; }
+
+  /* Lightbox on mobile */
+  #lb-track { width: 96vw; }
+  .lb-mockup { width: 96vw; height: 68vh; }
+  .lb-mockup-photo {
+    max-width: calc(96vw - 80px) !important;
+    max-height: calc(58vh - 80px) !important;
+  }
+  .lb-nav { width: 40px; height: 40px; font-size: 26px; }
+  #lb-prev { left: 6px; }
+  #lb-next { right: 6px; }
+  #lb-dots { margin-top: 12px; }
+}
 </style>
 </head>
 <body>
