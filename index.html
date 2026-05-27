@@ -721,6 +721,137 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 }
 #lightbox-close:hover { color: #fff; }
 .exhibit-grid .piece { cursor: zoom-in; }
+
+/* ── Mockup room slides (CSS-rendered frames) ── */
+.lb-mockup {
+  width: min(90vw, 1200px);
+  max-height: 82vh;
+  height: 74vh;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.lb-mockup.visible { opacity: 1; }
+
+/* Warm wall — linen / exposed plaster */
+.lb-mockup--warm {
+  background: #ede7dc;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(255,248,230,0.45) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(180,160,130,0.03) 3px, rgba(180,160,130,0.03) 4px);
+}
+.lb-mockup--warm::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 28px;
+  background: linear-gradient(to top, rgba(90,70,50,0.18), transparent);
+  border-top: 1px solid rgba(140,110,80,0.12);
+}
+
+/* Dark wall — brushed concrete */
+.lb-mockup--dark {
+  background: #17181d;
+  background-image:
+    radial-gradient(ellipse at 50% -10%, rgba(80,90,120,0.25) 0%, transparent 60%),
+    repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255,255,255,0.012) 4px, rgba(255,255,255,0.012) 5px);
+}
+.lb-mockup--dark::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 36px;
+  background: linear-gradient(to top, rgba(0,0,0,0.45), transparent);
+}
+
+/* The framed artwork container */
+.lb-mockup-frame-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.92);
+  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+}
+.lb-mockup-frame-wrap.visible { transform: scale(1); }
+
+/* Mat board (inner cream border) */
+.lb-mockup-mat {
+  padding: 18px;
+  background: #f4efe6;
+}
+.lb-mockup--dark .lb-mockup-mat {
+  background: #e8e4dc;
+}
+
+/* Outer frame */
+.lb-mockup-frame {
+  display: inline-block;
+  padding: 12px;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.25),
+    0 28px 80px rgba(0,0,0,0.35),
+    0 8px 20px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -1px 0 rgba(0,0,0,0.3);
+}
+.lb-mockup--warm .lb-mockup-frame {
+  background: linear-gradient(160deg, #3a2e25 0%, #241d16 60%, #1e1812 100%);
+}
+.lb-mockup--dark .lb-mockup-frame {
+  background: linear-gradient(160deg, #141416 0%, #0e0e10 60%, #111114 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 0 0 2px rgba(180,170,140,0.12),
+    0 30px 90px rgba(0,0,0,0.7),
+    0 8px 24px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.5);
+}
+
+/* The photo inside the frame */
+.lb-mockup-photo {
+  display: block;
+  max-width: 52vw;
+  max-height: 52vh;
+  width: auto; height: auto;
+  object-fit: contain;
+}
+
+/* Hanging wire simulation (top of frame) */
+.lb-mockup-frame-wrap::before {
+  content: '';
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  width: 1px;
+  height: 22px;
+  background: rgba(120,100,80,0.5);
+  box-shadow: -22px 0 0 rgba(120,100,80,0.3), 22px 0 0 rgba(120,100,80,0.3);
+  transform: translateX(-50%);
+}
+.lb-mockup--dark .lb-mockup-frame-wrap::before {
+  background: rgba(200,190,170,0.25);
+  box-shadow: -22px 0 0 rgba(200,190,170,0.15), 22px 0 0 rgba(200,190,170,0.15);
+}
+
+/* Slide label (bottom corner) */
+.lb-mockup-label {
+  position: absolute;
+  bottom: 38px;
+  right: 36px;
+  font-family: var(--pa-font-body);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  z-index: 2;
+}
+.lb-mockup--warm .lb-mockup-label { color: rgba(80,60,40,0.45); }
+.lb-mockup--dark  .lb-mockup-label { color: rgba(200,190,170,0.3); }
 </style>
 </head>
 <body>
@@ -1251,12 +1382,33 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 
   // Map each gallery image filename to its slide array.
   // Slide 0 = the original print. Slides 1+ = room mockups.
+  // Each entry: { type:'img', src } or { type:'mockup', src, theme:'warm'|'dark', label }
   const gallerySlides = {
-    'p1-bw-lake.jpg':      ['assets/p1-bw-lake.jpg',      'assets/p1-mockup-1.jpg', 'assets/p1-mockup-2.jpg'],
-    'p2-torres-grass.jpg': ['assets/p2-torres-grass.jpg'],
-    'p3-torres-wide.jpg':  ['assets/p3-torres-wide.jpg'],
-    'p4-fitz-river.jpg':   ['assets/p4-fitz-river.jpg'],
-    'p5-road.jpg':         ['assets/p5-road.jpg'],
+    'p1-bw-lake.jpg': [
+      { type:'img',    src:'assets/p1-bw-lake.jpg' },
+      { type:'img',    src:'assets/p1-mockup-1.jpg' },
+      { type:'img',    src:'assets/p1-mockup-2.jpg' },
+    ],
+    'p2-torres-grass.jpg': [
+      { type:'img',    src:'assets/p2-torres-grass.jpg' },
+      { type:'mockup', src:'assets/p2-torres-grass.jpg', theme:'warm', label:'Natural light' },
+      { type:'mockup', src:'assets/p2-torres-grass.jpg', theme:'dark', label:'Statement wall' },
+    ],
+    'p3-torres-wide.jpg': [
+      { type:'img',    src:'assets/p3-torres-wide.jpg' },
+      { type:'mockup', src:'assets/p3-torres-wide.jpg', theme:'warm', label:'Natural light' },
+      { type:'mockup', src:'assets/p3-torres-wide.jpg', theme:'dark', label:'Statement wall' },
+    ],
+    'p4-fitz-river.jpg': [
+      { type:'img',    src:'assets/p4-fitz-river.jpg' },
+      { type:'mockup', src:'assets/p4-fitz-river.jpg', theme:'warm', label:'Natural light' },
+      { type:'mockup', src:'assets/p4-fitz-river.jpg', theme:'dark', label:'Statement wall' },
+    ],
+    'p5-road.jpg': [
+      { type:'img',    src:'assets/p5-road.jpg' },
+      { type:'mockup', src:'assets/p5-road.jpg', theme:'warm', label:'Natural light' },
+      { type:'mockup', src:'assets/p5-road.jpg', theme:'dark', label:'Statement wall' },
+    ],
   };
 
   let currentSlides = [];
@@ -1273,19 +1425,66 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     }
   }
 
+  // Render a slide object ({ type, src, theme?, label? }) into #lb-track
+  function renderSlide(slide, alt) {
+    const track = document.getElementById('lb-track');
+    // fade out existing content
+    const existing = track.firstElementChild;
+    if (existing) {
+      existing.style.opacity = '0';
+      if (existing.classList.contains('lb-mockup-frame-wrap'))
+        existing.style.transform = 'scale(0.92)';
+    }
+    setTimeout(() => {
+      track.innerHTML = '';
+      if (slide.type === 'img') {
+        const img = document.createElement('img');
+        img.id = 'lightbox-img';
+        img.src = slide.src;
+        img.alt = alt || '';
+        img.style.cssText = 'opacity:0;transform:scale(0.94);transition:transform 0.45s var(--pa-ease-out),opacity 0.3s ease;';
+        track.appendChild(img);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          img.style.opacity = '1'; img.style.transform = 'scale(1)';
+        }));
+      } else {
+        // CSS mockup room slide
+        const wrap = document.createElement('div');
+        wrap.className = 'lb-mockup lb-mockup--' + slide.theme;
+        const fw = document.createElement('div');
+        fw.className = 'lb-mockup-frame-wrap';
+        const frame = document.createElement('div');
+        frame.className = 'lb-mockup-frame';
+        const mat = document.createElement('div');
+        mat.className = 'lb-mockup-mat';
+        const photo = document.createElement('img');
+        photo.className = 'lb-mockup-photo';
+        photo.src = slide.src;
+        photo.alt = alt || '';
+        mat.appendChild(photo);
+        frame.appendChild(mat);
+        fw.appendChild(frame);
+        wrap.appendChild(fw);
+        if (slide.label) {
+          const lbl = document.createElement('span');
+          lbl.className = 'lb-mockup-label';
+          lbl.textContent = slide.label;
+          wrap.appendChild(lbl);
+        }
+        track.appendChild(wrap);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          wrap.classList.add('visible');
+          fw.classList.add('visible');
+        }));
+      }
+    }, existing ? 220 : 0);
+  }
+
   function goTo(idx) {
     currentIdx = Math.max(0, Math.min(idx, currentSlides.length - 1));
-    // brief scale-down → swap → scale-up
-    lightboxImg.style.opacity = '0';
-    lightboxImg.style.transform = 'scale(0.94)';
-    setTimeout(() => {
-      lightboxImg.src = currentSlides[currentIdx];
-      lightboxImg.style.opacity = '1';
-      lightboxImg.style.transform = 'scale(1)';
-    }, 220);
+    renderSlide(currentSlides[currentIdx]);
     lbPrev.classList.toggle('hidden', currentIdx === 0);
     lbNext.classList.toggle('hidden', currentIdx === currentSlides.length - 1);
-    // update dots
     lbDots.querySelectorAll('.lb-dot').forEach((d, i) =>
       d.classList.toggle('active', i === currentIdx)
     );
@@ -1293,10 +1492,10 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 
   function openLightbox(filename, alt) {
     const key = filename.split('/').pop();
-    currentSlides = gallerySlides[key] || ['assets/' + key];
+    const raw = gallerySlides[key];
+    currentSlides = raw || [{ type:'img', src:'assets/' + key }];
     currentIdx = 0;
-    lightboxImg.src = currentSlides[0];
-    lightboxImg.alt = alt || '';
+    renderSlide(currentSlides[0], alt);
     renderDots(currentSlides.length, 0);
     lbPrev.classList.toggle('hidden', currentSlides.length <= 1);
     lbNext.classList.toggle('hidden', currentSlides.length <= 1);
@@ -1307,7 +1506,11 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   function closeLightbox() {
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
-    setTimeout(() => { lightboxImg.src = ''; lbDots.innerHTML = ''; }, 350);
+    setTimeout(() => {
+      document.getElementById('lb-track').innerHTML =
+        '<img id="lightbox-img" src="" alt="" />';
+      lbDots.innerHTML = '';
+    }, 380);
   }
 
   document.querySelector('.exhibit-grid').addEventListener('click', e => {
