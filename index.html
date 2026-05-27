@@ -608,6 +608,14 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
   transition: opacity 1.2s var(--pa-ease-out), transform 1.2s var(--pa-ease-out);
 }
 .reveal.active { opacity: 1; transform: translateY(0); }
+
+/* Sub-element stagger — body text, bullets, buttons after heading */
+.reveal .text-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.85s var(--pa-ease-out), transform 0.85s var(--pa-ease-out);
+}
+.reveal.active .text-reveal { opacity: 1; transform: translateY(0); }
 @keyframes blurInUp {
   from { opacity: 0; filter: blur(10px); transform: translateY(14px); }
   to   { opacity: 1; filter: blur(0px);  transform: translateY(0px);  }
@@ -980,7 +988,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     <div class="col5">
       <span class="eyebrow" data-i18n="vision.eyebrow">The Vision</span>
       <h2 class="headline" data-i18n="vision.title">Capturing the unseen breath of the Andes.</h2>
-      <p class="body-lg" style="margin-top:32px;" data-i18n="vision.body">Beyond the charted paths lies a world defined by the wind and the millennial migration of clouds. Our aerial surveys capture the pure, untamed geometry of the southern edge of the world, where ice meets the ether.</p>
+      <p class="body-lg text-reveal" style="margin-top:32px;" data-i18n="vision.body">Beyond the charted paths lies a world defined by the wind and the millennial migration of clouds. Our aerial surveys capture the pure, untamed geometry of the southern edge of the world, where ice meets the ether.</p>
     </div>
     <div class="col6-start7">
       <div class="card img-card">
@@ -988,7 +996,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
           <img src="assets/p4-fitz-river.jpg" alt="Fitz Roy Massif" style="object-position: center 30%;" />
         </div>
       </div>
-      <p class="caption" style="margin-top:14px; text-align:center;" data-i18n="vision.caption">Volcán Lanín | 12,000 ft</p>
+      <p class="caption text-reveal" style="margin-top:14px; text-align:center;" data-i18n="vision.caption">Volcán Lanín | 12,000 ft</p>
     </div>
   </section>
 </div>
@@ -999,7 +1007,7 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
     <div class="exhibit-head">
       <h2 class="headline italic" data-i18n="exhibition.title">The Exhibition</h2>
       <div class="exhibit-rule" aria-hidden="true"></div>
-      <p class="caption" data-i18n="exhibition.subtitle">Curated for the discerning eye</p>
+      <p class="caption text-reveal" data-i18n="exhibition.subtitle">Curated for the discerning eye</p>
     </div>
     <div class="exhibit-grid">
 
@@ -1118,8 +1126,8 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
       <div class="craft-col">
         <span class="eyebrow" data-i18n="craft.eyebrow">The Craft</span>
         <h3 class="headline" style="margin-top:8px;" data-i18n="craft.title">Master-grade pigment printing.</h3>
-        <p class="body-lg" style="margin-top:32px;" data-i18n="craft.body">Each piece is rendered on archival Hahnemühle paper, chosen for its ability to hold the deep, velvet indigos of the Patagonian night. Using master-grade carbon pigments, we ensure the silence of the landscape resonates for generations.</p>
-        <ul class="craft-bullets">
+        <p class="body-lg text-reveal" style="margin-top:32px;" data-i18n="craft.body">Each piece is rendered on archival Hahnemühle paper, chosen for its ability to hold the deep, velvet indigos of the Patagonian night. Using master-grade carbon pigments, we ensure the silence of the landscape resonates for generations.</p>
+        <ul class="craft-bullets text-reveal">
           <li><span class="dot" aria-hidden="true"></span><span class="lbl" data-i18n="craft.bullet.1">Hand-signed by the artist</span></li>
           <li><span class="dot" aria-hidden="true"></span><span class="lbl" data-i18n="craft.bullet.2">Certificate of Authenticity</span></li>
           <li><span class="dot" aria-hidden="true"></span><span class="lbl" data-i18n="craft.bullet.3">Museum-grade UV protection</span></li>
@@ -1141,8 +1149,8 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
 <div class="safe" id="journal">
   <section class="panel cta-panel reveal" id="cta-panel">
     <h2 class="display-1" data-i18n="cta.title">Acquire a fragment of infinity</h2>
-    <p class="body-lg" style="margin:32px auto 0;max-width:640px;" data-i18n="cta.body">Our pieces are produced as ultra-high-definition, pigment-based prints on museum-grade Hahnemühle paper. Each work is limited to a series of twelve globally.</p>
-    <div class="cta-actions">
+    <p class="body-lg text-reveal" style="margin:32px auto 0;max-width:640px;" data-i18n="cta.body">Our pieces are produced as ultra-high-definition, pigment-based prints on museum-grade Hahnemühle paper. Each work is limited to a series of twelve globally.</p>
+    <div class="cta-actions text-reveal">
       <button class="btn-pill primary" data-i18n="cta.button.catalogue">Request Catalogue</button>
       <button class="btn-pill" data-i18n="cta.button.consultation">Schedule Consultation</button>
     </div>
@@ -1404,6 +1412,10 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
       if (e.isIntersecting) {
         e.target.classList.add('active');
         e.target.querySelectorAll('.headline, .display-1, .subhead').forEach(h => splitBlurInUp(h));
+        // Stagger sub-elements after heading
+        e.target.querySelectorAll('.text-reveal').forEach((el, i) => {
+          el.style.transitionDelay = (0.42 + i * 0.13).toFixed(2) + 's';
+        });
         io.unobserve(e.target);
       }
     });
