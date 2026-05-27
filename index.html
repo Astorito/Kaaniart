@@ -231,6 +231,8 @@ html.dark .panel.alt { background: rgba(255,255,255,0.02); }
   letter-spacing: var(--pa-track-display);
   text-transform: uppercase;
   margin: 0;
+  text-wrap: balance;
+  max-width: 18ch;
 }
 .headline {
   font-family: var(--pa-font-headline);
@@ -1173,26 +1175,17 @@ html.dark .foot-logo { filter: invert(0.55) sepia(0.1) brightness(1.4); }
             <li><a href="#expeditions" data-i18n="footer.artist">The Artist</a></li>
           </ul>
         </div>
-        <div class="foot-col">
-          <span class="head" data-i18n="footer.legal">Legal</span>
-          <ul>
-            <li><a href="#" data-i18n="footer.privacy">Privacy</a></li>
-            <li><a href="#" data-i18n="footer.terms">Terms</a></li>
-            <li><a href="#" data-i18n="footer.shipping">Shipping</a></li>
-          </ul>
-        </div>
+
         <div class="foot-col">
           <span class="head" data-i18n="footer.social">Social</span>
           <ul>
             <li><a href="#">Instagram</a></li>
-            <li><a href="#">Vimeo</a></li>
           </ul>
         </div>
       </div>
     </div>
     <div class="foot-base">
       <span data-i18n="footer.rights">© 2026 Puelche Gallery. Captured in the wild.</span>
-      <span class="foot-cities">Santiago <span class="dot" aria-hidden="true"></span> London</span>
     </div>
   </footer>
 </div>
